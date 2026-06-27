@@ -1,25 +1,29 @@
-import { useEffect, useRef } from 'react';
-import { api } from '../api/api';
+import { useEffect } from "react";
+import api from "../api/api";
 
 export function useNotificationsStream(onEvent) {
-  const onEventRef = useRef(onEvent);
-
   useEffect(() => {
-    onEventRef.current = onEvent;
-  }, [onEvent]);
+    if (!onEvent) return undefined;
 
-  useEffect(() => {
     const stream = new EventSource(api.eventsURL);
 
-    stream.onmessage = (message) => {
+    stream.onmessage = (event) => {
       try {
-        const parsed = JSON.parse(message.data);
-        onEventRef.current?.(parsed);
-      } catch (_) {}
+        const parsed = JSON.parse(event.data);
+        onEvent(parsed);
+      } catch {
+        return;
+      }
     };
 
-    stream.onerror = () => {};
+    stream.onerror = () => {
+      stream.close();
+    };
 
-    return () => stream.close();
-  }, []);
+    return () => {
+      stream.close();
+    };
+  }, [onEvent]);
 }
+
+export default useNotificationsStream;

@@ -1,5 +1,5 @@
-import { createContext, useContext, useMemo, useState, useCallback } from 'react';
-import { api } from '../api/api';
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import api from "../api/api";
 
 const BookContext = createContext(null);
 
@@ -12,7 +12,7 @@ export function BookProvider({ children }) {
     setLoading(true);
     try {
       const data = await api.listBooks();
-      setBooks(data);
+      setBooks(Array.isArray(data) ? data : []);
       return data;
     } finally {
       setLoading(false);
@@ -20,13 +20,17 @@ export function BookProvider({ children }) {
   }, []);
 
   const fetchBookById = useCallback(async (bookId) => {
+    if (!bookId) return null;
     setLoading(true);
     try {
       const data = await api.getBook(bookId);
       setCurrentBook(data);
-      setBooks(prev => {
-        const exists = prev.some(b => b.id === data.id);
-        return exists ? prev.map(b => (b.id === data.id ? data : b)) : [data, ...prev];
+      setBooks((prev) => {
+        const exists = prev.some((item) => item.id === data.id);
+        if (exists) {
+          return prev.map((item) => (item.id === data.id ? data : item));
+        }
+        return [data, ...prev];
       });
       return data;
     } finally {
@@ -34,30 +38,31 @@ export function BookProvider({ children }) {
     }
   }, []);
 
-  const upsertBook = useCallback((book) => {
-    setBooks(prev => {
-      const exists = prev.some(item => item.id === book.id);
-      return exists ? prev.map(item => (item.id === book.id ? book : item)) : [book, ...prev];
-    });
-    setCurrentBook(prev => (prev?.id === book.id ? book : prev));
+  const clearCurrentBook = useCallback(() => {
+    setCurrentBook(null);
   }, []);
 
-  const value = useMemo(() => ({
-    books,
-    setBooks,
-    currentBook,
-    setCurrentBook,
-    loading,
-    fetchBooks,
-    fetchBookById,
-    upsertBook
-  }), [books, currentBook, loading, fetchBooks, fetchBookById, upsertBook]);
+  const value = useMemo(
+    () => ({
+      books,
+      setBooks,
+      currentBook,
+      setCurrentBook,
+      clearCurrentBook,
+      loading,
+      fetchBooks,
+      fetchBookById
+    }),
+    [books, currentBook, loading, fetchBooks, fetchBookById, clearCurrentBook]
+  );
 
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
 }
 
 export function useBooks() {
-  const ctx = useContext(BookContext);
-  if (!ctx) throw new Error('useBooks must be used within BookProvider');
-  return ctx;
+  const context = useContext(BookContext);
+  if (!context) {
+    throw new Error("useBooks must be used within BookProvider");
+  }
+  return context;
 }

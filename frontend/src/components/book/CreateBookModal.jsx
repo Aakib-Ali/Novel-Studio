@@ -1,61 +1,96 @@
-import { useState } from 'react';
-import { useUI } from '../../context/UIContext';
-import { useBookActions } from '../../hooks/useBookActions';
+import { useState } from "react";
+import { useUI } from "../../context/UIContext";
+import useBookActions from "../../hooks/useBookActions";
 
 export default function CreateBookModal() {
   const { createBookOpen, setCreateBookOpen } = useUI();
   const { createBook, uploadProgress } = useBookActions();
-  const [form, setForm] = useState({ title: '', author: '', file: null });
-  const [submitting, setSubmitting] = useState(false);
+
+  const [form, setForm] = useState({
+    title: "",
+    author: "",
+    file: null
+  });
+  const [saving, setSaving] = useState(false);
 
   if (!createBookOpen) return null;
 
-  const submit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
+  const submit = async (event) => {
+    event.preventDefault();
+    setSaving(true);
     try {
       await createBook(form);
-      setForm({ title: '', author: '', file: null });
+      setForm({ title: "", author: "", file: null });
+      setCreateBookOpen(false);
     } finally {
-      setSubmitting(false);
+      setSaving(false);
     }
   };
 
   return (
-    <div className="modal-backdrop-ns">
-      <div className="modal-card-ns">
-        <div className="section-header">
+    <div className="modal-scrim">
+      <div className="modal-card-v2">
+        <div className="modal-head">
           <div>
-            <h3 className="section-title">Create book</h3>
-            <p className="section-note">Upload the first TXT or PDF chapter during creation.</p>
+            <h3>Create book</h3>
+            <p>Every book starts with title, author, and the first TXT or PDF chapter file.</p>
           </div>
-          <button className="icon-button" onClick={() => setCreateBookOpen(false)}>Close</button>
+
+          <button className="ns-icon-btn" type="button" onClick={() => setCreateBookOpen(false)}>
+            Close
+          </button>
         </div>
 
         <form onSubmit={submit} className="form-stack">
           <div>
             <label>Title</label>
-            <input className="form-control ns-input" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required />
+            <input
+              className="ns-input"
+              value={form.title}
+              onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
+              required
+            />
           </div>
+
           <div>
             <label>Author</label>
-            <input className="form-control ns-input" value={form.author} onChange={e => setForm({ ...form, author: e.target.value })} required />
+            <input
+              className="ns-input"
+              value={form.author}
+              onChange={(e) => setForm((prev) => ({ ...prev, author: e.target.value }))}
+              required
+            />
           </div>
+
           <div>
             <label>First chapter file</label>
-            <input className="form-control ns-input" type="file" accept=".txt,.pdf" onChange={e => setForm({ ...form, file: e.target.files?.[0] || null })} required />
+            <input
+              className="ns-input"
+              type="file"
+              accept=".txt,.pdf"
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, file: e.target.files?.[0] || null }))
+              }
+              required
+            />
           </div>
 
-          {uploadProgress > 0 && (
-            <div className="progress-shell">
-              <div className="progress-bar" style={{ width: `${uploadProgress}%` }} />
+          {uploadProgress > 0 ? (
+            <div className="ns-progress">
+              <div style={{ width: `${uploadProgress}%` }} />
             </div>
-          )}
+          ) : null}
 
           <div className="action-row">
-            <button type="button" className="btn ns-btn ns-btn-secondary" onClick={() => setCreateBookOpen(false)}>Cancel</button>
-            <button type="submit" className="btn ns-btn ns-btn-primary" disabled={submitting}>
-              {submitting ? 'Creating...' : 'Create book'}
+            <button
+              type="button"
+              className="ns-btn ns-btn-secondary"
+              onClick={() => setCreateBookOpen(false)}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="ns-btn ns-btn-primary" disabled={saving}>
+              {saving ? "Creating..." : "Create book"}
             </button>
           </div>
         </form>

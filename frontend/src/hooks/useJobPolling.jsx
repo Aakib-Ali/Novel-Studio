@@ -1,45 +1,61 @@
-import { useEffect, useState } from 'react';
-import { api } from '../api/api';
-import { useBooks } from '../context/BookContext';
+import { useEffect, useRef, useState } from "react";
+import api from "../api/api";
 
-export function useJobPolling(bookId) {
-  const { fetchBookById } = useBooks();
+export default function useJobPolling(bookId, onRefresh) {
   const [jobs, setJobs] = useState([]);
+  const previousStatusesRef = useRef({});
 
   useEffect(() => {
     if (!bookId) return;
 
     let active = true;
-    let timerId = null;
 
     const load = async () => {
       try {
-        const data = await api.listJobs({ book_id: bookId, active_only: true });
+        const result = await api.listJobs({
+          book_id: bookId,
+          active_only: false
+        });
+
         if (!active) return;
 
-        setJobs(data);
+        const safeJobs = Array.isArray(result) ? result : [];
+        setJobs(safeJobs);
 
-        if (data.length > 0) {
-          await fetchBookById(bookId);
+        let shouldRefreshBook = false;
+        const previousStatuses = previousStatusesRef.current;
+
+        for (const job of safeJobs) {
+          const previousStatus = previousStatuses[job.id];
+          const currentStatus = job.status;
+
+          if (
+            previousStatus &&
+            previousStatus !== currentStatus &&
+            currentStatus === "completed"
+          ) {
+            shouldRefreshBook = true;
+          }
+
+          previousStatuses[job.id] = currentStatus;
         }
 
-        if (active) {
-          timerId = setTimeout(load, data.length > 0 ? 2500 : 5000);
+        if (shouldRefreshBook && onRefresh) {
+          await onRefresh(bookId);
         }
       } catch (error) {
-        if (active) {
-          timerId = setTimeout(load, 5000);
-        }
+        console.error("Job polling failed:", error);
       }
     };
 
     load();
+    const timer = setInterval(load, 2500);
 
     return () => {
       active = false;
-      if (timerId) clearTimeout(timerId);
+      clearInterval(timer);
     };
-  }, [bookId, fetchBookById]);
+  }, [bookId, onRefresh]);
 
   return jobs;
 }

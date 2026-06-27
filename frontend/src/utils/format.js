@@ -1,8 +1,9 @@
 export function formatDateTime(value) {
-  if (!value) return '—';
+  if (!value) return "—";
   return new Date(value).toLocaleString();
 }
 
-export function formatStatus(value = '') {
-  return value.replaceAll('_', ' ');
+export function formatStatus(value) {
+  if (!value) return "Unknown";
+  return value.replaceAll("_", " ");
 }
