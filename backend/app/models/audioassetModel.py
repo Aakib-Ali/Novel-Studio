@@ -1,25 +1,28 @@
-from sqlalchemy import String, ForeignKey, Float
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime
+
+from sqlalchemy import Column, DateTime, ForeignKey, Float, String
+from sqlalchemy.orm import relationship
 
 from app.core.database import Base
-from .baseModel import TimestampMixin
 
 
-class AudioAsset(Base, TimestampMixin):
+class AudioAsset(Base):
     __tablename__ = "audioassets"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
-    bookid: Mapped[str] = mapped_column(ForeignKey("books.id"), index=True)
-    chapterid: Mapped[str] = mapped_column(ForeignKey("chapters.id"), index=True)
+    id = Column(String, primary_key=True, index=True)
+    book_id = Column(String, ForeignKey("books.id"), nullable=False, index=True)
+    chapter_id = Column(String, ForeignKey("chapters.id"), nullable=False, index=True)
 
-    language: Mapped[str] = mapped_column(String(20), nullable=False)
-    voicename: Mapped[str] = mapped_column(String(100), nullable=False)
-    accent: Mapped[str] = mapped_column(String(100), nullable=False)
-    sourcetexttype: Mapped[str] = mapped_column(String(30), nullable=False)
+    language = Column(String, nullable=False)
+    voice_name = Column(String, nullable=False)
+    accent = Column(String, nullable=True)
+    source_text_type = Column(String, nullable=False)
 
-    filepath: Mapped[str] = mapped_column(String(500), nullable=False)
-    duration: Mapped[float | None] = mapped_column(Float, nullable=True)
-    status: Mapped[str] = mapped_column(String(50), default="queued")
+    file_path = Column(String, nullable=False)
+    status = Column(String, default="queued", nullable=False)
+    duration_seconds = Column(Float, nullable=True)
 
-    book = relationship("Book", back_populates="audioassets")
-    chapter = relationship("Chapter", back_populates="audioassets")
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    book = relationship("Book", back_populates="audio_assets")
+    chapter = relationship("Chapter", back_populates="audio_assets")

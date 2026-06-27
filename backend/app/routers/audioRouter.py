@@ -5,62 +5,74 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.models.book import Book
-from app.models.chapter import Chapter
-from app.models.audio_asset import AudioAsset
-from app.schemas.audio import AudioGenerateRequest
-from app.services.audio_service import serialize_audio_asset
-from app.services.job_service import spawn_book_audio, spawn_chapter_audio
+from app.models.audioassetModel import AudioAsset
+from app.models.bookModel import Book
+from app.models.chapterModel import Chapter
+from app.schemas.audioSchema import AudioGenerateRequest
+from app.services.audioService import serializeaudioasset
+from app.services.jobService import spawnbookaudio, spawnchapteraudio
 
 router = APIRouter(prefix="/audio", tags=["audio"])
 
-
-@router.post("/books/{book_id}")
-async def generate_book_audio(book_id: str, payload: AudioGenerateRequest, db: Session = Depends(get_db)):
-    book = db.get(Book, book_id)
+@router.post("/books/{bookid}")
+async def generate_book_audio(
+    bookid: str,
+    payload: AudioGenerateRequest,
+    db: Session = Depends(get_db),
+):
+    book = db.get(Book, bookid)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
 
-    spawn_book_audio(
-        book_id=book_id,
+    spawnbookaudio(
+        bookid=bookid,
         language=payload.language,
-        speaker_id=payload.speaker_id,
-        source_text_type=payload.source_text_type,
+        speakerid=payload.speakerid,
+        sourcetexttype=payload.sourcetexttype,
         accent=payload.accent,
     )
     return {"message": "Book audio generation job started"}
 
-
-@router.post("/chapters/{chapter_id}")
-async def generate_chapter_audio(chapter_id: str, payload: AudioGenerateRequest, db: Session = Depends(get_db)):
-    chapter = db.get(Chapter, chapter_id)
+@router.post("/chapters/{chapterid}")
+async def generate_chapter_audio(
+    chapterid: str,
+    payload: AudioGenerateRequest,
+    db: Session = Depends(get_db),
+):
+    chapter = db.get(Chapter, chapterid)
     if not chapter:
         raise HTTPException(status_code=404, detail="Chapter not found")
 
-    spawn_chapter_audio(
-        book_id=chapter.book_id,
-        chapter_id=chapter_id,
+    spawnchapteraudio(
+        bookid=chapter.book_id,
+        chapterid=chapterid,
         language=payload.language,
-        speaker_id=payload.speaker_id,
-        source_text_type=payload.source_text_type,
+        speakerid=payload.speakerid,
+        sourcetexttype=payload.sourcetexttype,
         accent=payload.accent,
     )
     return {"message": "Chapter audio generation job started"}
 
 
 @router.get("/chapters/{chapter_id}")
-def list_chapter_audio(chapter_id: str, db: Session = Depends(get_db)):
+def list_chapter_audio(
+    chapter_id: str,
+    db: Session = Depends(get_db),
+):
     assets = (
         db.query(AudioAsset)
         .filter(AudioAsset.chapter_id == chapter_id)
         .order_by(AudioAsset.created_at.desc())
         .all()
     )
-    return [serialize_audio_asset(asset) for asset in assets]
+    return [serializeaudioasset(asset) for asset in assets]
 
 
 @router.get("/assets/{asset_id}/download")
-def download_audio(asset_id: str, db: Session = Depends(get_db)):
+def download_audio(
+    asset_id: str,
+    db: Session = Depends(get_db),
+):
     asset = db.get(AudioAsset, asset_id)
     if not asset or not asset.file_path:
         raise HTTPException(status_code=404, detail="Audio asset not found")

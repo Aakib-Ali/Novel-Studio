@@ -1,32 +1,33 @@
 import wave
+
 from gtts import gTTS
 
-from app.services.storage_service import build_audio_path
-from app.services.speaker_service import resolve_tld
-from app.utils.audio import estimate_duration_seconds
+from app.services.speakerService import getdefaultspeakerforlanguage, getspeaker, resolvetld
+from app.services.storageService import buildaudiopath
+from app.utils.audioUtil import estimatedurationseconds
 
 
 class GTTSProvider:
     def synthesize(self, text: str, language: str, accent: str = "indian", speaker: dict | None = None):
-        path = build_audio_path(".mp3")
-        normalized_language = (language or "en").lower().strip()
-        normalized_text = text or "Empty audio"
-        tld = resolve_tld(normalized_language, accent, speaker)
+        path = buildaudiopath(".mp3")
+        normalizedlanguage = (language or "en").lower().strip()
+        normalizedtext = text or "Empty audio"
+        tld = resolvetld(normalizedlanguage, accent)
 
         gTTS(
-            text=normalized_text,
-            lang=normalized_language,
+            text=normalizedtext,
+            lang=normalizedlanguage,
             tld=tld,
-            slow=False
+            slow=False,
         ).save(str(path))
 
-        return str(path), estimate_duration_seconds(normalized_text)
+        return str(path), estimatedurationseconds(normalizedtext)
 
 
 class SilentWaveProvider:
     def synthesize(self, text: str, language: str, accent: str = "indian", speaker: dict | None = None):
-        duration = estimate_duration_seconds(text)
-        path = build_audio_path(".wav")
+        duration = estimatedurationseconds(text)
+        path = buildaudiopath(".wav")
         framerate = 22050
         frames = int(duration * framerate)
 
@@ -34,7 +35,7 @@ class SilentWaveProvider:
             wav.setnchannels(1)
             wav.setsampwidth(2)
             wav.setframerate(framerate)
-            silence = (b"\x00\x00" * frames)
+            silence = b"\x00\x00" * frames
             wav.writeframes(silence)
 
         return str(path), duration
@@ -47,19 +48,19 @@ class TTSService:
 
     def synthesize(self, text: str, language: str, accent: str = "indian", speaker: dict | None = None):
         try:
-            return self.primary.synthesize(
-                text=text,
-                language=language,
-                accent=accent,
-                speaker=speaker
-            )
+            return self.primary.synthesize(text=text, language=language, accent=accent, speaker=speaker)
         except Exception:
-            return self.fallback.synthesize(
-                text=text,
-                language=language,
-                accent=accent,
-                speaker=speaker
-            )
+            return self.fallback.synthesize(text=text, language=language, accent=accent, speaker=speaker)
 
 
-tts_service = TTSService()
+ttsservice = TTSService()
+
+
+def synthesizespeech(text: str, language: str, speakerid: str | None = None, accent: str | None = None):
+    speaker = getspeaker(speakerid) if speakerid else getdefaultspeakerforlanguage(language)
+    return ttsservice.synthesize(
+        text=text,
+        language=language,
+        accent=accent or speaker.get("accent", "indian"),
+        speaker=speaker,
+    )

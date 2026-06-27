@@ -1,29 +1,34 @@
 from pydantic import BaseModel
-from .audio import AudioAssetRead
+
+from .audioSchema import AudioAssetRead
+
 
 class ChapterTextUpdate(BaseModel):
-    translated_text: str | None = None
-    replaced_text: str | None = None
+    translatedtext: str | None = None
+    replacedtext: str | None = None
+
 
 class ReplacementRule(BaseModel):
     find: str
-    replace_with: str
+    replacewith: str
+
 
 class ReplacementRequest(BaseModel):
     replacements: list[ReplacementRule]
-    source_text_type: str = "translated"
+    sourcetexttype: str = "translated"
+
 
 class ChapterRead(BaseModel):
     id: str
-    book_id: str
-    chapter_number: int
+    bookid: str
+    chapternumber: int
     title: str | None = None
-    original_text: str
-    translated_text: str | None = None
-    replaced_text: str | None = None
-    translation_status: str
-    replacement_status: str
-    audio_status: str
-    created_at: str
-    updated_at: str
-    audio_assets: list[AudioAssetRead] = []
+    originaltext: str
+    translatedtext: str | None = None
+    replacedtext: str | None = None
+    translationstatus: str
+    replacementstatus: str
+    audiostatus: str
+    createdat: str
+    updatedat: str
+    audioassets: list[AudioAssetRead]

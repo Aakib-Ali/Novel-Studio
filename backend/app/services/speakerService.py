@@ -1,77 +1,103 @@
 from fastapi import HTTPException
 
 
-def list_speakers(api_prefix: str = "/api"):
+def listspeakers(apiprefix: str = "/api"):
     return [
         {
-            "id": "hi_female_a",
-            "display_name": "Hindi Female A",
+            "id": "hifemalea",
+            "displayname": "Hindi Female A",
             "language": "hi",
+            "languagecode": "hi-IN",
             "accent": "indian",
             "gender": "female",
             "style": "editorial",
+            "provider": "gtts",
+            "providervoiceid": "hi-india-female-a",
+            "tld": "co.in",
+            "supportsemotion": False,
+            "supportscloning": False,
             "active": True,
-            "preview_url": f"{api_prefix}/speakers/hi_female_a/preview",
+            "previewurl": f"{apiprefix}/speakers/hifemalea/preview",
         },
         {
-            "id": "hi_male_b",
-            "display_name": "Hindi Male B",
+            "id": "himaleb",
+            "displayname": "Hindi Male B",
             "language": "hi",
+            "languagecode": "hi-IN",
             "accent": "indian",
             "gender": "male",
             "style": "clear",
+            "provider": "gtts",
+            "providervoiceid": "hi-india-male-b",
+            "tld": "co.in",
+            "supportsemotion": False,
+            "supportscloning": False,
             "active": True,
-            "preview_url": f"{api_prefix}/speakers/hi_male_b/preview",
+            "previewurl": f"{apiprefix}/speakers/himaleb/preview",
         },
         {
-            "id": "en_voice_c",
-            "display_name": "English Voice C",
+            "id": "envoicec",
+            "displayname": "English Voice C",
             "language": "en",
+            "languagecode": "en-IN",
             "accent": "global",
             "gender": "female",
             "style": "studio",
+            "provider": "gtts",
+            "providervoiceid": "en-global-female-c",
+            "tld": "com",
+            "supportsemotion": False,
+            "supportscloning": False,
             "active": True,
-            "preview_url": f"{api_prefix}/speakers/en_voice_c/preview",
+            "previewurl": f"{apiprefix}/speakers/envoicec/preview",
         },
         {
-            "id": "en_voice_d",
-            "display_name": "English Voice D",
+            "id": "envoiced",
+            "displayname": "English Voice D",
             "language": "en",
+            "languagecode": "en-IN",
             "accent": "neutral",
             "gender": "male",
             "style": "narrative",
+            "provider": "gtts",
+            "providervoiceid": "en-neutral-male-d",
+            "tld": "com",
+            "supportsemotion": False,
+            "supportscloning": False,
             "active": True,
-            "preview_url": f"{api_prefix}/speakers/en_voice_d/preview",
+            "previewurl": f"{apiprefix}/speakers/envoiced/preview",
         },
     ]
 
 
-def get_speaker(speaker_id: str, api_prefix: str = "/api"):
-    speaker = next(
-        (item for item in list_speakers(api_prefix) if item["id"] == speaker_id),
-        None,
-    )
+def getspeaker(speakerid: str, apiprefix: str = "/api"):
+    speaker = next((item for item in listspeakers(apiprefix) if item["id"] == speakerid), None)
     if not speaker:
         raise HTTPException(status_code=404, detail="Speaker not found")
     return speaker
 
 
-def get_default_speaker_for_language(language: str, api_prefix: str = "/api"):
-    speakers = [
-        item
-        for item in list_speakers(api_prefix)
-        if item["language"] == language and item["active"]
-    ]
-
+def getdefaultspeakerforlanguage(language: str, apiprefix: str = "/api"):
+    speakers = [item for item in listspeakers(apiprefix) if item["language"] == language and item["active"]]
     if not speakers:
-        raise HTTPException(
-            status_code=404,
-            detail=f"No active speaker found for language: {language}",
-        )
+        raise HTTPException(status_code=404, detail=f"No active speaker found for language {language}")
 
-    indian_voice = next(
-        (item for item in speakers if item.get("accent") == "indian"),
-        None,
-    )
+    indianvoice = next((item for item in speakers if item.get("accent") == "indian"), None)
+    return indianvoice or speakers[0]
 
-    return indian_voice or speakers[0]
+
+def resolvetld(language: str, accent: str | None = None) -> str:
+    language = (language or "en").lower()
+    accent = (accent or "").lower()
+
+    if language == "hi":
+        return "co.in"
+    if accent in {"indian", "india", "in"}:
+        return "co.in"
+    if accent in {"uk", "british", "gb"}:
+        return "co.uk"
+    if accent in {"australian", "au"}:
+        return "com.au"
+    if accent in {"american", "us"}:
+        return "com"
+    return "com"

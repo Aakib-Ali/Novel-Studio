@@ -1,28 +1,45 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.models.book import Book
-from app.models.chapter import Chapter
-from app.schemas.book import TranslationRequest
-from app.services.job_service import spawn_book_translation, spawn_chapter_translation
+from app.models.bookModel import Book
+from app.models.chapterModel import Chapter
+from app.schemas.bookSchema import TranslationRequest
+from app.services.jobService import runbooktranslationtask, runchaptertranslationtask
 
 router = APIRouter(prefix="/translation", tags=["translation"])
 
 
-@router.post("/books/{book_id}")
-async def translate_book(book_id: str, payload: TranslationRequest, db: Session = Depends(get_db)):
-    book = db.get(Book, book_id)
+@router.post("/books/{bookid}")
+async def translatebook(
+    bookid: str,
+    payload: TranslationRequest,
+    backgroundtasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    book = db.get(Book, bookid)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
-    spawn_book_translation(book_id, payload.target_language)
+
+    backgroundtasks.add_task(runbooktranslationtask, bookid, payload.targetlanguage)
     return {"message": "Book translation job started"}
 
 
-@router.post("/chapters/{chapter_id}")
-async def translate_chapter(chapter_id: str, payload: TranslationRequest, db: Session = Depends(get_db)):
-    chapter = db.get(Chapter, chapter_id)
+@router.post("/chapters/{chapterid}")
+async def translatechapter(
+    chapterid: str,
+    payload: TranslationRequest,
+    backgroundtasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    chapter = db.get(Chapter, chapterid)
     if not chapter:
         raise HTTPException(status_code=404, detail="Chapter not found")
-    spawn_chapter_translation(chapter.book_id, chapter_id, payload.target_language)
+
+    backgroundtasks.add_task(
+        runchaptertranslationtask,
+        chapter.bookid,
+        chapterid,
+        payload.targetlanguage,
+    )
     return {"message": "Chapter translation job started"}

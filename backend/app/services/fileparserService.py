@@ -7,11 +7,10 @@ def extracttextfromfile(path: Path) -> str:
     suffix = path.suffix.lower()
 
     if suffix == ".txt":
-        return path.read_text(encoding="utf-8", errors="ignore").strip()
+        return path.read_text(encoding="utf-8", errors="ignore")
 
     if suffix == ".pdf":
         reader = PdfReader(str(path))
-        text = "\n".join((page.extract_text() or "").strip() for page in reader.pages).strip()
-        return text
+        return "\n".join(page.extract_text() or "" for page in reader.pages)
 
     raise ValueError("Unsupported file type. Only .txt and .pdf are allowed.")

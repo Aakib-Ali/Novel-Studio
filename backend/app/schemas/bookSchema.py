@@ -1,19 +1,22 @@
 from pydantic import BaseModel
-from .chapter import ChapterRead
+
+from .chapterSchema import ChapterRead
+
 
 class TranslationRequest(BaseModel):
-    target_language: str = "hi"
+    targetlanguage: str = "hi"
+
 
 class BookRead(BaseModel):
     id: str
     title: str
     author: str
-    workflow_status: str
+    workflowstatus: str
     summary: str | None = None
-    chapters_count: int
-    translated_count: int
-    replaced_count: int
-    audio_count: int
-    created_at: str
-    updated_at: str
-    chapters: list[ChapterRead] = []
+    chapterscount: int
+    translatedcount: int
+    replacedcount: int
+    audiocount: int
+    createdat: str
+    updatedat: str
+    chapters: list[ChapterRead]

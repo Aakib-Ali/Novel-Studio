@@ -1,7 +1,9 @@
 from sqlalchemy import String, Integer, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.core.database import Base
-from .base import TimestampMixin
+from .baseModel import TimestampMixin
+
 
 class Job(Base, TimestampMixin):
     __tablename__ = "jobs"
@@ -14,6 +16,6 @@ class Job(Base, TimestampMixin):
     message: Mapped[str] = mapped_column(String(500), default="")
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    book_id: Mapped[str | None] = mapped_column(ForeignKey("books.id"), nullable=True)
-    chapter_id: Mapped[str | None] = mapped_column(ForeignKey("chapters.id"), nullable=True)
-    audio_asset_id: Mapped[str | None] = mapped_column(ForeignKey("audio_assets.id"), nullable=True)
+    bookid: Mapped[str | None] = mapped_column(ForeignKey("books.id"), nullable=True)
+    chapterid: Mapped[str | None] = mapped_column(ForeignKey("chapters.id"), nullable=True)
+    audioassetid: Mapped[str | None] = mapped_column(ForeignKey("audioassets.id"), nullable=True)

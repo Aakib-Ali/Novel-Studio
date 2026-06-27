@@ -1,16 +1,33 @@
-from sqlalchemy import String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.core.database import Base
-from .base import TimestampMixin
+from datetime import datetime
 
-class Book(Base, TimestampMixin):
+from sqlalchemy import Column, DateTime, Integer, String, Text
+from sqlalchemy.orm import relationship
+
+from app.core.database import Base
+
+
+class Book(Base):
     __tablename__ = "books"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
-    title: Mapped[str] = mapped_column(String(255), nullable=False)
-    author: Mapped[str] = mapped_column(String(255), nullable=False)
-    workflow_status: Mapped[str] = mapped_column(String(50), default="ready")
-    summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    id = Column(String, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    author = Column(String, nullable=False)
+    summary = Column(Text, nullable=True)
 
-    chapters = relationship("Chapter", back_populates="book", cascade="all, delete-orphan", order_by="Chapter.chapter_number")
-    audio_assets = relationship("AudioAsset", back_populates="book", cascade="all, delete-orphan")
+    workflow_status = Column(String, default="ready", nullable=False)
+
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    chapters = relationship(
+        "Chapter",
+        back_populates="book",
+        cascade="all, delete-orphan",
+        order_by="Chapter.chapter_number",
+    )
+
+    audio_assets = relationship(
+        "AudioAsset",
+        back_populates="book",
+        cascade="all, delete-orphan",
+    )
