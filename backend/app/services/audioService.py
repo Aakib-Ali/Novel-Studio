@@ -64,6 +64,8 @@ def finalize_audio_asset(
     status: str = "completed"
 ):
     asset = db.get(AudioAsset, asset_id)
+    if not asset:
+        raise HTTPException(status_code=404, detail="Audio asset not found")
     asset.file_path = file_path
     asset.duration = duration
     asset.status = status

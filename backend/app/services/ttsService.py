@@ -1,15 +1,14 @@
 import wave
 from gtts import gTTS
 
-from app.services.speaker_service import resolve_tld
 from app.services.storage_service import build_audio_path
+from app.services.speaker_service import resolve_tld
 from app.utils.audio import estimate_duration_seconds
 
 
 class GTTSProvider:
     def synthesize(self, text: str, language: str, accent: str = "indian", speaker: dict | None = None):
         path = build_audio_path(".mp3")
-
         normalized_language = (language or "en").lower().strip()
         normalized_text = text or "Empty audio"
         tld = resolve_tld(normalized_language, accent, speaker)
