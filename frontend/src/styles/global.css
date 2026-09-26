@@ -1,0 +1,111 @@
+:root {
+  --ns-page: #f7f6f3;
+  --ns-surface: #ffffff;
+  --ns-ink: #25222b;
+  --ns-muted: #6e6877;
+  --ns-border: #e6e2e8;
+  --ns-violet: #6d5bd0;
+  --ns-violet-dark: #5847bd;
+  --ns-violet-soft: #f1effb;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family:
+    Inter,
+    "Noto Sans Devanagari",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #f7f6f3;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f7f6f3;
+  color: #25222b;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family:
+    Inter,
+    "Noto Sans Devanagari",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background: rgba(109, 91, 208, 0.18);
+  color: #25222b;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f7f6f3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cfc9d3;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b7b0bc;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

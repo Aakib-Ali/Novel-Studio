@@ -1,0 +1,185 @@
+.tools {
+  padding: 18px;
+  border: 1px solid var(--ns-border);
+  border-radius: 16px;
+  background: var(--ns-surface);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.search {
+  width: min(100%, 420px);
+}
+
+.searchIcon {
+  margin-right: 8px;
+  color: var(--ns-muted);
+}
+
+.sortRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort {
+  min-width: 185px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  overflow-x: auto;
+  border-top: 1px solid var(--ns-border);
+}
+
+.filter {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ns-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filter:hover {
+  background: var(--ns-violet-soft);
+}
+
+.selectedFilter,
+.selectedFilter:hover {
+  background: var(--ns-violet);
+  color: #fff;
+}
+
+.resultHeader {
+  margin: 30px 0 16px;
+}
+
+.resultHeader h2 {
+  margin: 0;
+  color: var(--ns-ink);
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.resultHeader p {
+  margin: 4px 0 0;
+  color: var(--ns-muted);
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 18px;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.listRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--ns-border);
+  border-radius: 14px;
+  background: var(--ns-surface);
+  text-align: left;
+  cursor: pointer;
+}
+
+.listRow:hover {
+  border-color: #b8adef;
+}
+
+.listText {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.listText strong,
+.listText small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listText strong {
+  color: var(--ns-ink);
+  font-size: 15px;
+}
+
+.listText small {
+  color: var(--ns-muted);
+  font-size: 12px;
+}
+
+.listStatus {
+  flex: 0 0 auto;
+}
+
+.form {
+  display: grid;
+  gap: 18px;
+  padding-top: 10px !important;
+}
+
+.form p {
+  margin: 0;
+  color: var(--ns-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 699px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .sortRow {
+    justify-content: space-between;
+  }
+
+  .sort {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 599px) {
+  .tools {
+    padding: 12px;
+  }
+
+  .viewSwitch {
+    display: none !important;
+  }
+
+  .listStatus {
+    display: none;
+  }
+}

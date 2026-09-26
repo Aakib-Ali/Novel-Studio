@@ -1,0 +1,67 @@
+.cover {
+  position: relative;
+  min-width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--cover-dark);
+  box-shadow: 0 6px 14px rgba(30, 25, 42, 0.15);
+  container-type: inline-size;
+}
+
+.variant0 { --cover-dark: #242039; --cover-accent: #6553a6; }
+.variant1 { --cover-dark: #163b46; --cover-accent: #398c9d; }
+.variant2 { --cover-dark: #4c263f; --cover-accent: #b76382; }
+.variant3 { --cover-dark: #3d302f; --cover-accent: #a87e68; }
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  height: 100%;
+  padding: 10cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+  background: linear-gradient(145deg, var(--cover-dark) 15%, var(--cover-accent) 100%);
+  border-left: 4px solid rgba(0, 0, 0, 0.18);
+}
+
+.rule {
+  display: block;
+  width: 35%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.text { min-width: 0; }
+
+.title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  font-family: "Source Serif 4", "Noto Serif Devanagari", Georgia, serif;
+  font-size: clamp(13px, 16cqw, 25px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.author {
+  display: block;
+  margin-top: 5cqw;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(8px, 8cqw, 12px);
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

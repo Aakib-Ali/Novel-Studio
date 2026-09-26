@@ -1,0 +1,230 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 22px;
+  color: var(--ns-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--ns-violet-dark);
+}
+
+.identity {
+  display: grid;
+  grid-template-columns: 164px minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+  min-height: 246px;
+  padding: 18px;
+  border: 1px solid var(--ns-border);
+  border-radius: 18px;
+  background: var(--ns-surface);
+}
+
+.identity > :first-child {
+  height: 246px;
+}
+
+.identityText {
+  min-width: 0;
+}
+
+.identityText h1 {
+  margin: 15px 0 4px;
+  color: var(--ns-ink);
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.author {
+  margin: 0;
+  color: var(--ns-muted);
+  font-size: 16px;
+}
+
+.summary {
+  margin: 22px 0 0;
+  color: var(--ns-muted);
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.editForm {
+  display: grid;
+  gap: 18px;
+  padding-top: 12px !important;
+}
+
+.sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.panel {
+  min-width: 0;
+  min-height: 160px;
+  padding: 22px;
+  border: 1px solid var(--ns-border);
+  border-radius: 16px;
+  background: var(--ns-surface);
+}
+
+.sectionTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  color: var(--ns-ink);
+  font-size: 18px;
+}
+
+.chapterList {
+  display: grid;
+  margin-top: 20px;
+  border-top: 1px solid var(--ns-border);
+}
+
+.chapterRow {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ns-border);
+  color: var(--ns-ink);
+  text-decoration: none;
+}
+
+.chapterRow:hover .chapterTitle {
+  color: var(--ns-violet-dark);
+}
+
+.chapterNumber,
+.chapterWords {
+  color: var(--ns-muted);
+  font-size: 12px;
+}
+
+.chapterTitle {
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.message {
+  margin: 18px 0 0;
+  color: var(--ns-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.translation {
+  margin-top: 24px;
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--ns-muted);
+  font-size: 13px;
+}
+
+.progressLabels strong {
+  color: var(--ns-ink);
+}
+
+.notFound {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.notFound h1 {
+  margin: 0;
+}
+
+.notFound p {
+  color: var(--ns-muted);
+}
+
+.notFound a {
+  color: var(--ns-violet-dark);
+  font-weight: 600;
+}
+
+@media (max-width: 899px) {
+  .sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 599px) {
+  .identity {
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 16px;
+    padding: 14px;
+    min-height: 0;
+  }
+
+  .identity > :first-child {
+    height: 162px;
+  }
+
+  .identityText h1 {
+    margin-top: 10px;
+    font-size: 24px;
+  }
+
+  .author {
+    font-size: 13px;
+  }
+
+  .summary {
+    margin-top: 14px;
+    font-size: 12px;
+  }
+
+  .actions {
+    margin-top: 16px;
+  }
+
+  .actions button {
+    font-size: 12px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .chapterRow {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+
+  .chapterWords {
+    grid-column: 2;
+  }
+}

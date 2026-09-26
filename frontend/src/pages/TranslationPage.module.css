@@ -1,0 +1,197 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 22px;
+  color: var(--ns-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.back:hover {
+  color: var(--ns-violet-dark);
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--ns-violet-dark);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.heading h1 {
+  margin: 0;
+  color: var(--ns-ink);
+  font-size: clamp(30px, 4vw, 40px);
+}
+
+.heading p:last-child {
+  margin: 8px 0 0;
+  color: var(--ns-muted);
+  line-height: 1.6;
+}
+
+.counts {
+  display: grid;
+  gap: 2px;
+  padding: 14px 20px;
+  border: 1px solid var(--ns-border);
+  border-radius: 14px;
+  background: var(--ns-surface);
+}
+
+.counts strong {
+  font-size: 22px;
+  color: var(--ns-ink);
+}
+
+.counts span {
+  color: var(--ns-muted);
+  font-size: 12px;
+}
+
+.panel,
+.empty {
+  border: 1px solid var(--ns-border);
+  border-radius: 16px;
+  background: var(--ns-surface);
+}
+
+.panel {
+  overflow: hidden;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+}
+
+.panelHeader h2 {
+  margin: 0;
+  color: var(--ns-ink);
+  font-size: 19px;
+}
+
+.panelHeader span {
+  color: var(--ns-muted);
+  font-size: 13px;
+}
+
+.list {
+  border-top: 1px solid var(--ns-border);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--ns-border);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:hover {
+  background: var(--ns-violet-soft);
+}
+
+.number {
+  color: var(--ns-muted);
+  font-size: 13px;
+}
+
+.title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--ns-ink);
+  font-weight: 600;
+}
+
+.title small {
+  display: block;
+  margin-top: 4px;
+  color: var(--ns-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.approved {
+  background: #eaf7ef;
+  color: #257c4b;
+}
+
+.draft {
+  background: #fff4e8;
+  color: #99621e;
+}
+
+.pending {
+  background: #f2f0f4;
+  color: var(--ns-muted);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.empty h1,
+.empty h2 {
+  margin: 0;
+}
+
+.empty p {
+  max-width: 440px;
+  margin: 0 0 8px;
+  color: var(--ns-muted);
+  line-height: 1.6;
+}
+
+.empty a:not(:global(.MuiButton-root)) {
+  color: var(--ns-violet-dark);
+}
+
+@media (max-width: 599px) {
+  .row {
+    grid-template-columns: 24px minmax(0, 1fr);
+    padding: 14px 16px;
+  }
+
+  .badge {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .panelHeader {
+    padding: 18px 16px;
+  }
+}
